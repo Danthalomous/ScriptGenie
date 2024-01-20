@@ -1,7 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import AboutView from '../views/AboutView.vue'
-import ProfileDetailsView from '../views/ProfileDetailsView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '../views/HomeView.vue';
+import AboutView from '../views/AboutView.vue';
+import ProfileDetailsView from '../views/ProfileDetailsView.vue';
+import store from '../stores/index';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,19 +10,31 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
     },
     {
       path: '/about',
       name: 'about',
-      component: AboutView
+      component: AboutView,
     },
     {
       path: '/profile',
       name: 'profile',
-      component: ProfileDetailsView
-    }
-  ]
-})
+      component: ProfileDetailsView,
+      meta: { requiresAuth: true }, // meta field for authentication check
+    },
+  ],
+});
 
-export default router
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = store.getters.isAuthenticated;
+
+  if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
+    // If the route requires authentication and the user is not authenticated, redirect to home
+    next('/');
+  } else {
+    next();
+  }
+});
+
+export default router;

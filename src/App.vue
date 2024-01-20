@@ -7,61 +7,41 @@
       <router-link v-if="loggedIn" to="/profile"> profile</router-link> |
       <router-link to="/about"> about</router-link> |
       <div @click="toggleModal">login/register</div>
-      <div v-if="showLoginModal" class="modal">
-        <div class="modal-content">
-          <h2>Login</h2>
-          <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" v-model="email" placeholder="Enter your email" />
-          </div>
-          <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" v-model="password" placeholder="Enter your password" />
-          </div>
-          <button @click="closeModal">Close</button>
-        </div>
-      </div>
+      <component :is="currentModalComponent" @close="closeModal" :is-visible="showLoginModal" />
     </div>
     <router-view/>
   </header>
 </template>
 
+
 <script>
+import LoginModal from './components/LoginModal.vue';
+
 export default {
   data() {
     return {
       showLoginModal: false,
-      loggedIn: true,
+      loggedIn: true, // You can replace this with your actual authentication check
+      currentModalComponent: null,
     };
   },
   methods: {
     toggleModal() {
       console.log("Toggle modal called");
       this.showLoginModal = !this.showLoginModal;
+      this.currentModalComponent = this.showLoginModal ? 'LoginModal' : null;
     },
     closeModal() {
       this.showLoginModal = false;
+      this.currentModalComponent = null;
     },
+  },
+  components: {
+    LoginModal,
   },
 };
 </script>
 
 <style>
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-}
+/* Your global styles here */
 </style>
