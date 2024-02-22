@@ -5,6 +5,7 @@ import App from './App.vue'
 import LoginComponent from './components/LoginModal.vue'
 import store from "../src/stores/index"
 import router from './router'
+import 'vuetify/styles'
 
 const app = createApp(App)
 

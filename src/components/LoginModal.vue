@@ -75,17 +75,22 @@ export default {
     },
     async login() {
       try {
-        const response = await axios.post('https://localhost:7273/login/ProcessLogin', {
+        const loginResponse = await axios.post('https://localhost:7273/login/ProcessLogin', {
           email: this.email,
           password: this.password,
         });
 
-        const token = response.data.token;
+        const token = loginResponse.data.token; // Store the token locally
+
+        // Get the user ID and store it
+        const userIDResponse = await axios.get('https://localhost:7273/login/GetUserID?email=' + this.email);
+        const userID = userIDResponse.data;
+
+        // Use Vuex action to store the user ID
+        this.$store.commit('setUserID', userID);
 
         // Use Vuex action to store the token
         this.$store.dispatch('login', token);
-
-        console.log('Login successful. Token:', token);
 
         this.closeModal();
       } catch (error) {
