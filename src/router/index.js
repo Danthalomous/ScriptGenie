@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import AboutView from '../views/AboutView.vue';
 import ProfileDetailsView from '../views/ProfileDetailsView.vue';
+import ScriptGenieViewWAccount from '../views/ScriptGenieWAccountView.vue'
+import ScriptGenieViewWOAccount from '../views/ScriptGenieWOAccountView.vue'
 import store from '../stores/index';
 
 const router = createRouter({
@@ -23,7 +25,18 @@ const router = createRouter({
       component: ProfileDetailsView,
       meta: { requiresAuth: true }, // meta field for authentication check
     },
-  ],
+    {
+      path: '/script-genie-w-account',
+      name: 'script-genie-w-account',
+      component: ScriptGenieViewWAccount,
+      meta: { requiresAuth: true }, // meta field for authentication check
+    },
+    {
+      path: '/script-genie-wo-account',
+      name: 'script-genie-wo-account',
+      component: ScriptGenieViewWOAccount,
+    }
+  ]
 });
 
 router.beforeEach((to, from, next) => {

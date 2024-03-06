@@ -1,5 +1,5 @@
 <template>
-    <p>WO Account</p>
+    <p>Script Genie</p>
 </template>
 
 <script>

@@ -56,8 +56,6 @@ export default createStore({
         }
 
         commit('setOrganizations', organizations);
-
-        console.log("Organizations: ", organizations);
       }
       catch (error) {
         console.log(error);

@@ -1,4 +1,3 @@
-<!-- App.vue -->
 <template>
   <header>
     <h1 align="center">[TITLE]</h1>
@@ -9,21 +8,31 @@
       <div @click="toggleModal">login/register</div>
       <component :is="currentModalComponent" @close="closeModal" :is-visible="showLoginModal" />
     </div>
-    <router-view/>
+    <br>
+    <router-link :to="scriptGenieLink">Script Genie</router-link>
   </header>
+  <router-view/>
 </template>
-
 
 <script>
 import LoginModal from './components/LoginModal.vue';
+import { mapGetters } from 'vuex'; // Import mapGetters from Vuex
 
 export default {
   data() {
     return {
       showLoginModal: false,
-      loggedIn: true, // You can replace this with your actual authentication check
       currentModalComponent: null,
     };
+  },
+  computed: {
+    ...mapGetters(['isAuthenticated']), // Map isAuthenticated getter from Vuex store
+    loggedIn() {
+      return this.isAuthenticated; // Use isAuthenticated getter to determine authentication status
+    },
+    scriptGenieLink() {
+      return this.loggedIn ? '/script-genie-w-account' : '/script-genie-wo-account'; // Dynamically set Script Genie link based on authentication status
+    }
   },
   methods: {
     toggleModal() {
