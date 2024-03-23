@@ -80,7 +80,7 @@
           </span>
         </div>
         <div>
-          <label for="roster">Roster:</label>
+          <label for="roster">Rosters:</label>
           <div>
             <div>
               <label for="playerName">Player Name:</label>
@@ -109,6 +109,7 @@
           <ul>
             <li v-for="player in roster.players" :key="player.id">
               {{ player.playerName }}
+              <button type="button" @click="deletePlayer">Delete Player</button>
             </li>
           </ul>
         </div>
@@ -119,6 +120,7 @@
 </template>
 
 <script>
+import router from '@/router';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -132,7 +134,8 @@ export default {
         OrganizationName: '',
         TeamName: '',
         ConferenceRelevance: '',
-        CompetitionLevel: ''
+        CompetitionLevel: '',
+        Rosters: []
       },
       roster: {
         coachName: '',
@@ -142,17 +145,23 @@ export default {
       player: {
         playerName: '',
         playerPosition: '',
-        playerNumber: '',
+        playerNumber: 0,
         playerIsStarting: false,
       },
-      defaultId: '92b9eebb-3ee4-44c3-8a68-17f2c980a271',
+      defaultId: this.$store.getters.userID,
     };
   },
   methods: {
     isValidAlphabetic(value) {
+      if(value == '')
+        return true;
+
       return /^[a-zA-Z\s]+$/.test(value);
     },
     isValidAlphaNumeric(value) {
+      if(value == null || value == '')
+        return true;
+
       return /^[a-zA-Z0-9\s]+$/.test(value);
     },
     isValidNumber(value) {
@@ -179,16 +188,16 @@ export default {
       if(!this.isValidAlphabetic(this.roster.rosterName)) {
         return; // Don't submit if Roster Name is invalid
       }
-      if(!this.isValidAlphabetic(this.roster.coachName)) {
+      if(!this.isValidAlphabetic(this.roster.coachName) || this.roster.coachName == null) {
         return; // Don't submit if Coach Name is invalid
       }
-      if(!this.isValidAlphabetic(this.player.playerName)) {
+      if(!this.isValidAlphabetic(this.player.playerName) || this.player.playerName == null) {
         return; // Don't submit if Player Name is invalid
       }
-      if(!this.isValidAlphabetic(this.player.playerPosition)) {
+      if(!this.isValidAlphabetic(this.player.playerPosition) || this.player.playerPosition == null) {
         return; // Don't submit if Player Position is invalid
       }
-      if(!this.isValidNumber(this.player.playerNumber)) {
+      if(!this.isValidNumber(this.player.playerNumber) || this.player.playerNumber == null) {
         return; // Don't submit if Player Number is invalid
       }
 
@@ -199,7 +208,6 @@ export default {
       
       // Generate RosterID
       const RosterID = uuidv4();
-      console.log(RosterID); // REMOVE THIS
 
       // Prepare data to send
       const organizationDataToSend = {
@@ -259,6 +267,11 @@ export default {
         playerDataToSend
       );
       console.log(playerResponse.data);
+
+      const currentRoute = this.$route.path;
+    this.$router.push({ path: '/empty' }).then(() => {
+      this.$router.push({ path: currentRoute });
+    });
     }
 
         // Clear the data
@@ -276,6 +289,7 @@ export default {
         TeamName: '',
         ConferenceRelevance: '',
         CompetitionLevel: '',
+        Rosters: [],
       };
       this.roster = {
         rosterName: '',
@@ -284,7 +298,7 @@ export default {
       this.player = {
         playerName: '',
         playerPosition: '',
-        playerNumber: '',
+        playerNumber: 0,
         playerIsStarting: false,
       };
       this.players = [];
@@ -297,6 +311,9 @@ export default {
         playerNumber: '',
         playerIsStarting: false,
       };
+    },
+    deletePlayer() {
+      this.roster.players.pop(this.player);
     },
   },
 };

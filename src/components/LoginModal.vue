@@ -59,16 +59,13 @@ export default {
     };
   },
   mounted() {
-    console.log("LoginModal.vue was mounted");
   },
   methods: {
     closeModal() {
-      console.log("closeModal called");
       this.$emit('close'); // Emit an event to notify the parent
     },
     openModal() {
-      console.log("openModal called");
-      // You can set additional logic here if needed
+      // Additional logic here if needed
     },
     setActiveTab(tab) {
       this.activeTab = tab;

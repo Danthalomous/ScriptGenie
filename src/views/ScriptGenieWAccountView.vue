@@ -343,12 +343,13 @@
             </div>
         </div>
     </div>
-    <button type="submit">Generate Script</button>
+      <button type="submit">Generate Script</button>
    </form>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import { PDFDocument, rgb} from 'pdf-lib';
 
 export default {
     data() {
@@ -365,7 +366,9 @@ export default {
         OrganizationName: '',
         TeamName: '',
         ConferenceRelevance: '',
-        CompetitionLevel: ''
+        CompetitionLevel: '',
+        Roster: {},
+        CoachName: ''
       },
       awayOrganizationData: {
         OrganizationID: '',
@@ -374,7 +377,9 @@ export default {
         OrganizationName: '',
         TeamName: '',
         ConferenceRelevance: '',
-        CompetitionLevel: ''
+        CompetitionLevel: '',
+        Roster: {},
+        CoachName: ''
       },
       homeRosterData: {
         coachName: '',
@@ -455,9 +460,15 @@ export default {
   },
   methods: {
     isValidAlphabetic(value) {
+      if(value == '')
+        return true;
+
       return /^[a-zA-Z\s]+$/.test(value);
     },
     isValidAlphaNumeric(value) {
+      if(value == null || value == '')
+        return true;
+
       return /^[a-zA-Z0-9\s]+$/.test(value);
     },
     isValidNumber(value) {
@@ -514,6 +525,8 @@ export default {
       this.homeOrganizationData.TeamName = this.selectedHomeOrganization.teamName;
       this.homeOrganizationData.ConferenceRelevance = this.selectedHomeOrganization.conferenceRelevance;
       this.homeOrganizationData.CompetitionLevel = this.selectedHomeOrganization.competitionLevel;
+      this.homeOrganizationData.Roster = this.selectedHomeOrganization.rosters[0];
+      this.homeOrganizationData.CoachName = this.selectedHomeOrganization.rosters[0].coachName;
     },
     updateAwayOrganization() {
       this.awayOrganizationData.OrganizationID = this.selectedAwayOrganization.organizationID;
@@ -523,25 +536,165 @@ export default {
       this.awayOrganizationData.TeamName = this.selectedAwayOrganization.teamName;
       this.awayOrganizationData.ConferenceRelevance = this.selectedAwayOrganization.conferenceRelevance;
       this.awayOrganizationData.CompetitionLevel = this.selectedAwayOrganization.competitionLevel;
+      this.awayOrganizationData.Roster = this.selectedAwayOrganization.rosters[0];
+      this.awayOrganizationData.CoachName = this.selectedAwayOrganization.rosters[0].roster.coachName;
     },
     async submitForm() {
-      // Validate before submission
-      if (!this.isValidAlphabetic(this.organizationData.TeamName)) {
-        return; // Don't submit if Team Name is invalid
+      const pdfDoc = await PDFDocument.create();
+    const page = pdfDoc.addPage();
+
+    // Add content to the PDF document
+    const { height } = page.getSize();
+    const fontSize = 12;
+    let textX = 50;
+    let textY = height - 4 * fontSize;
+
+    page.drawText(`Date: ${this.dateAndTime}; Sport: ${this.selectedSport}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+    textY -= fontSize;
+
+    // Home Organization
+    page.drawText('Home Organization Information:', { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+    textY -= fontSize * 2;
+    page.drawText(`Venue Name: ${this.homeOrganizationData.VenueName}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+    textY -= fontSize;
+    page.drawText(`Facility Name: ${this.homeOrganizationData.FacilityName}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+    textY -= fontSize;
+    page.drawText(`Organization Name: ${this.homeOrganizationData.OrganizationName}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+    textY -= fontSize;
+    page.drawText(`Team Name: ${this.homeOrganizationData.TeamName}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+    textY -= fontSize;
+    page.drawText(`Conference Relevance: ${this.homeOrganizationData.ConferenceRelevance}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+    textY -= fontSize;
+    page.drawText(`Competition Level: ${this.homeOrganizationData.CompetitionLevel}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+
+    // Away Organization
+    textY -= fontSize * 2;
+    page.drawText('Away Organization Information:', { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+    textY -= fontSize * 2;
+    page.drawText(`Venue Name: ${this.awayOrganizationData.VenueName}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+    textY -= fontSize;
+    page.drawText(`Facility Name: ${this.awayOrganizationData.FacilityName}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+    textY -= fontSize;
+    page.drawText(`Organization Name: ${this.awayOrganizationData.OrganizationName}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+    textY -= fontSize;
+    page.drawText(`Team Name: ${this.awayOrganizationData.TeamName}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+    textY -= fontSize;
+    page.drawText(`Conference Relevance: ${this.awayOrganizationData.ConferenceRelevance}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+    textY -= fontSize;
+    page.drawText(`Competition Level: ${this.awayOrganizationData.CompetitionLevel}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+
+      // PAA messages
+      if (this.welcomeMessage.enabled) {
+        textY -= fontSize * 2;
+        page.drawText(`Welcome Message: ${this.welcomeMessage.message}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
       }
-      if (!this.isValidAlphabetic(this.organizationData.VenueName)) {
-        return;
+      if (this.liveStream.enabled) {
+        textY -= fontSize * 2;
+        page.drawText(`Live Stream: ${this.liveStream.network}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
       }
-      if (!this.isValidAlphabetic(this.organizationData.FacilityName)) {
-        return;
+      if (this.sportsmanship.enabled) {
+        textY -= fontSize * 2;
+        page.drawText(`Sportsmanship: ${this.sportsmanship.message}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
       }
-      if (!this.isValidAlphabetic(this.organizationData.OrganizationName)) {
-        return;
+      if (this.concessions.enabled) {
+        textY -= fontSize * 2;
+        page.drawText(`Concessions: ${this.concessions.message}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
       }
-      if (!this.isValidAlphaNumeric(this.organizationData.CompetitionLevel)) {
-        return; // Don't submit if Competition Level is invalid
+      if (this.merchandise.enabled) {
+        textY -= fontSize * 2;
+        page.drawText(`Merchandise: ${this.merchandise.message}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
       }
-    }
+      if (this.referees.enabled) {
+        textY -= fontSize * 2;
+        page.drawText(`Referees: ${this.referees.message}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+      }
+      if (this.endOfEvent.enabled) {
+        textY -= fontSize * 2;
+        page.drawText(`End of Event: ${this.endOfEvent.message}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+      }
+      if (this.goodbyeMessage.enabled) {
+        textY -= fontSize * 2;
+        page.drawText(`Goodbye Message: ${this.goodbyeMessage.message}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+      }
+      if (this.nextGameData.enabled) {
+        textY -= fontSize * 2;
+        page.drawText(`Next Game Data:`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+        textY -= fontSize;
+        page.drawText(`Date: ${this.nextGameData.date}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+        textY -= fontSize;
+        page.drawText(`Opponent Name: ${this.nextGameData.nextOpponentName}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+        textY -= fontSize;
+        page.drawText(`Opponent Mascot: ${this.nextGameData.nextOpponentMascot}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+        textY -= fontSize;
+        page.drawText(`Game Location: ${this.nextGameData.nextGameLocation}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+      }
+      if (this.prayer.enabled) {
+        textY -= fontSize * 2;
+        page.drawText(`Prayer: ${this.prayer.personPraying}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+      }
+      if (this.nationalAnthem.enabled) {
+        textY -= fontSize * 2;
+        page.drawText(`National Anthem: ${this.nationalAnthem.personSinging}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+      }
+
+      // Add roster data if enabled
+if (this.rosters.homeRosterEnabled) {
+    textY -= fontSize * 2;
+    page.drawText('Home Roster:', { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+
+    textY -= fontSize * 2;
+    page.drawText(`Coach Name: ${this.homeOrganizationData.Roster.coachName}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+
+    // Iterate through players
+    this.homeOrganizationData.Roster.roster.forEach((player, index) => {
+        textY -= fontSize * 2;
+        page.drawText(`Player ${index + 1}:`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+        textY -= fontSize;
+        page.drawText(`Name: ${player.playerName}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+        textY -= fontSize;
+        page.drawText(`Position: ${player.playerPosition}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+        textY -= fontSize;
+        page.drawText(`Number: ${player.playerNumber}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+        textY -= fontSize;
+        page.drawText(`Starting: ${player.playerIsStarting ? 'Yes' : 'No'}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+    });
+}
+
+if (this.rosters.awayRosterEnabled) {
+    textY -= fontSize * 2;
+    page.drawText('Away Roster:', { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+
+    textY -= fontSize * 2;
+    page.drawText(`Coach Name: ${this.awayOrganizationData.Roster.coachName}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+
+    // Iterate through players
+    this.awayOrganizationData.Roster.roster.forEach((player, index) => {
+        textY -= fontSize * 2;
+        page.drawText(`Player ${index + 1}:`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+        textY -= fontSize;
+        page.drawText(`Name: ${player.playerName}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+        textY -= fontSize;
+        page.drawText(`Position: ${player.playerPosition}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+        textY -= fontSize;
+        page.drawText(`Number: ${player.playerNumber}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+        textY -= fontSize;
+        page.drawText(`Starting: ${player.playerIsStarting ? 'Yes' : 'No'}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+    });
+}
+
+      // Save the PDF document as a blob
+      const pdfBytes = await pdfDoc.save();
+
+      // Trigger download
+      this.downloadFile(pdfBytes);
+    },
+    downloadFile(pdfBytes) {
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'script.pdf';
+      link.click();
+    },
   },
   computed: {
     ...mapGetters(['organizations']),

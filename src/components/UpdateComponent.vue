@@ -90,13 +90,14 @@
           <ul>
             <li v-for="player in roster.roster" :key="player.id">
               {{ player.playerName }}
+              <button type="button" @click="deletePlayer(player, rosterIndex)">Delete Player</button>
             </li>
           </ul>
         </li>
       </ul>
     </div>
         <br>
-        <button type="submit">Submit</button>
+        <button type="submit">Update</button>
       </form>
       <br>
       <!-- Delete button -->
@@ -118,6 +119,7 @@
     data() {
       return {
         player: {
+          playedID: uuidv4,
           playerName: '',
           playerPosition: '',
           playerNumber: '',
@@ -151,8 +153,6 @@
       console.log("Roster Response:", rosterResponse.data);
     }
 
-    console.log("New Players: ", this.newPlayers);
-    console.log("Roster IDs: ", this.rosterIds);
     // Update/Add players:
     for (let i = 0; i < this.rosterIds.length; i++) {
         const playerDataToSend = {
@@ -174,6 +174,11 @@
     }
 
     this.clearFormData();
+
+    const currentRoute = this.$route.path;
+    this.$router.push({ path: '/empty' }).then(() => {
+      this.$router.push({ path: currentRoute });
+    });
   } catch (error) {
     console.error('Error:', error);
   }
@@ -201,6 +206,11 @@
 
         // Clear form data after deletion
         this.clearFormData();
+
+        const currentRoute = this.$route.path;
+    this.$router.push({ path: '/empty' }).then(() => {
+      this.$router.push({ path: currentRoute });
+    });
 
         console.log("All data deleted successfully.");
       } catch (error) {
@@ -248,7 +258,38 @@
         playerNumber: '',
         playerIsStarting: false,
       };
-    },
+      },
+      async deletePlayer(player, rosterIndex) {
+  try {
+    // Find the index of the player to delete in the roster
+    const indexToDelete = this.organizationData.rosters[rosterIndex].roster.findIndex(p => p.playerID === player.playerID);
+    
+    if (indexToDelete !== -1) {
+      // Remove the player from the roster
+      this.organizationData.rosters[rosterIndex].roster.splice(indexToDelete, 1);
+      
+      // Remove the player from newPlayers array
+      const newPlayerIndex = this.newPlayers.findIndex(p => p.playerID === player.playerID);
+      if (newPlayerIndex !== -1) {
+        this.newPlayers.splice(newPlayerIndex, 1);
+      }
+      
+      // Remove the player from rosterIds array if needed
+      if (this.rosterIds.length > rosterIndex) {
+        this.rosterIds.splice(rosterIndex, 1);
+      }
+
+      // Perform the deletion on the server side
+      await axios.delete(`https://localhost:7273/profile/delete/player?playerID=${player.playerID}`);
+
+    } else {
+      console.error('Player not found in roster.');
+    }
+  } catch (error) {
+    console.error('Error deleting player:', error);
+  }
+},
+
     },
   };
   </script>

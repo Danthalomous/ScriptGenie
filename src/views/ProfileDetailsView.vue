@@ -2,10 +2,15 @@
     <div class="container">
       <aside class="aside">
         <ul>
+          <li>
+            <button @click="createNewOrganization">
+              Create New Organization
+            </button>
+          </li>
           <li v-for="organization in organizations" :key="organization.OrganizationID">
             <!-- Use a button or any other clickable element to trigger the loadOrganizationDetails method -->
             <button @click="loadOrganizationDetails(organization)">
-              {{ organization.OrganizationName }}
+              {{ organization.organizationName }}
             </button>
           </li>
         </ul>
@@ -39,7 +44,17 @@
         this.selectedOrganizationData = organization; // Set the selected organization data
         this.currentComponent = UpdateComponent; // Switch to UpdateComponent
       },
+      createNewOrganization(){
+        this.currentComponent = OrganizationComponent;
+        this.selectedOrganizationData = null;
+      },
+      async fetchData() {
+        await this.$store.dispatch('fetchOrganizations');
+      },
     },
+    async mounted() {
+      await this.fetchData();
+    }
   };
   </script>
   

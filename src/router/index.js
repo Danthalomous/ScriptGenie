@@ -43,8 +43,16 @@ router.beforeEach((to, from, next) => {
   const isAuthenticated = store.getters.isAuthenticated;
 
   if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
-    // If the route requires authentication and the user is not authenticated, redirect to home
-    next('/');
+    // If the route requires authentication and the user is not authenticated, check local storage for token
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      // If token exists in local storage, set it in Vuex store and proceed to the route
+      store.commit('setAuthToken', token);
+      next();
+    } else {
+      // If token does not exist in local storage, redirect to home
+      next('/');
+    }
   } else {
     next();
   }
