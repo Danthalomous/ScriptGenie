@@ -3,35 +3,77 @@
   <div v-if="isVisible" class="modal-overlay">
     <div class="modal-content">
       <button class="close-button" @click="closeModal">X</button>
-      <h2>Login or Register</h2>
       <div class="tab-buttons">
         <button :class="{ active: activeTab === 'login' }" @click="setActiveTab('login')">Login</button>
         <button :class="{ active: activeTab === 'register' }" @click="setActiveTab('register')">Register</button>
       </div>
       <form v-if="activeTab === 'login'" @submit.prevent="login">
-        <label for="email">Email:</label>
-        <input type="text" v-model="email" required>
-        <label for="password">Password:</label>
-        <input type="password" v-model="password" required>
-        <button type="submit" class="submit-button">Login</button>
+        <div>
+          <input 
+            type="text" 
+            v-model="email" 
+            required 
+            placeholder="Email"
+            class="custom-input"
+          >
+        </div>
+        <div class="input-group">
+          <input 
+            type="password" 
+            v-model="password" 
+            required 
+            placeholder="Password"
+            class="custom-input"
+          >
+        </div>
+        <br>
+        <button type="submit" class="submit-button"><p class="custom-font-color">Login</p></button>
+        <br>
+        <p align="right" class="custom-font-color">Forgot Password?</p>
       </form>
+      <!-- Register Form -->
       <form v-if="activeTab === 'register'" @submit.prevent="register">
-        <label for="email">Email:</label>
-        <input type="text" v-model="email" @input="validateEmail" required>
+        <div class="input-group">
+          <input 
+            type="text" 
+            v-model="email" 
+            @input="validateEmail"
+            required 
+            placeholder="Email"
+            class="custom-input"
+          >
+        </div>
         <!-- Display email format error message -->
         <div v-if="emailFormatError" class="alert-box error-box">Email is invalid</div>
-        <label for="password">Password:</label>
-        <input type="password" v-model="password" @input="validatePassword" required>
+        <div class="input-group">
+          <input 
+            type="password" 
+            v-model="password"
+            @input="validatePassword" 
+            required 
+            placeholder="Password"
+            class="custom-input"
+          >
+        </div>
         <!-- Display password format error messages -->
         <div v-if="passwordLengthError" class="alert-box error-box">Password needs to be 6-18 characters long</div>
         <div v-if="passwordSpecialCharError" class="alert-box error-box">Password needs to have at least one special character: @ $ % & *</div>
         <div v-if="passwordCapitalError" class="alert-box error-box">Password needs to have at least one capital letter</div>
         <div v-if="passwordNumberError" class="alert-box error-box">Password needs to have at least one number 0-9</div>
-        <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" v-model="confirmPassword" @input="validateConfirmPassword" required>
+        <div class="input-group">
+          <input 
+            type="password" 
+            v-model="confirmPassword"
+            @input="validateConfirmPassword" 
+            required 
+            placeholder="Confirm Password"
+            class="custom-input"
+          >
+        </div>
         <!-- Display confirm password error message -->
         <div v-if="confirmPasswordError" class="alert-box error-box">Passwords do not match</div>
-        <button type="submit" class="submit-button">Register</button>
+        <br>
+        <button type="submit" class="submit-button"><p class="custom-font-color">Register</p></button>
       </form>
     </div>
   </div>
@@ -144,22 +186,22 @@ export default {
       this.passwordNumberError = false;
 
       // Password length validation
-      if (this.password.length < 6 || this.password.length > 18) {
+      if ((this.password.length < 6 || this.password.length > 18) && this.password.length > 0) {
         this.passwordLengthError = true;
       }
 
       // Password special character validation
-      if (!/[!@#$%^&*]/.test(this.password)) {
+      if ((!/[!@#$%^&*]/.test(this.password)) && this.password.length > 0) {
         this.passwordSpecialCharError = true;
       }
 
       // Password capital letter validation
-      if (!/[A-Z]/.test(this.password)) {
+      if ((!/[A-Z]/.test(this.password)) && this.password.length > 0) {
         this.passwordCapitalError = true;
       }
 
       // Password number validation
-      if (!/\d/.test(this.password)) {
+      if ((!/\d/.test(this.password)) && this.password.length > 0) {
         this.passwordNumberError = true;
       }
     },
@@ -168,7 +210,7 @@ export default {
       this.emailFormatError = false;
 
       // Validate email format
-      if (!this.isValidEmail(this.email)) {
+      if ((!this.isValidEmail(this.email)) && this.email.length > 0) {
         this.emailFormatError = true;
       }
     },
@@ -177,13 +219,13 @@ export default {
       this.confirmPasswordError = false;
 
       // Validate if passwords match
-      if (this.password !== this.confirmPassword) {
+      if ((this.password !== this.confirmPassword) && this.confirmPassword.length > 0) {
         this.confirmPasswordError = true;
       }
     },
     isValidEmail(email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
+      return emailRegex.test(email) && email.length > 0;
     },
   },
   watch: {
@@ -199,6 +241,25 @@ export default {
 </script>
 
 <style scoped>
+.custom-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: white;
+  box-sizing: border-box; /* Ensure padding is included in the width */
+  margin-bottom: 10px; /* Adjust spacing between input fields */
+}
+
+.submit-button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #00D9FF;
+  box-sizing: border-box; /* Ensure padding is included in the width */
+  margin-bottom: 10px; /* Adjust spacing between input fields */
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -213,9 +274,11 @@ export default {
 }
 
 .modal-content {
-  background: #fff;
+  background: #F1F1F1;
+  width: 325px;
   padding: 20px;
   border-radius: 8px;
+  position: relative;
 }
 
 .close-button {
@@ -244,7 +307,7 @@ export default {
 }
 
 .tab-buttons button.active {
-  background-color: #3498db;
+  background-color: #FF5964;
   color: #fff;
 }
 
@@ -261,5 +324,9 @@ export default {
   color: #a94442;
   background-color: #f2dede;
   border-color: #ebccd1;
+}
+
+.custom-font-color {
+  color: #FFFFFF;
 }
 </style>

@@ -1,28 +1,33 @@
 <template>
-  <header>
-    <h1 align="center">[TITLE]</h1>
-    <div align="center" id="nav">
-      <router-link to="/">home</router-link> |
-      <router-link v-if="loggedIn" to="/profile"> profile</router-link> |
-      <router-link to="/about"> about</router-link> |
-      <div @click="toggleModal">login/register</div>
-      <component :is="currentModalComponent" @close="closeModal" :is-visible="showLoginModal" />
-    </div>
-    <br>
-    <router-link :to="scriptGenieLink">Script Genie</router-link>
-  </header>
-  <router-view/>
+  <v-app>
+    <v-app-bar app color="#646464" light fixed :elevation="5">
+      <template v-slot:append>
+        <v-app-bar-nav-icon class="mr-4" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      </template>
+    </v-app-bar>
+
+    <!-- Navigation Drawer -->
+    <v-navigation-drawer color="#646464" v-model="drawer" location="right">
+      <v-list>
+        <v-list-item v-for="link in filteredLinks" :key="link.to" link :to="link.to">
+          <v-list-item-title>{{ link.text }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+    <v-footer app color="#646464" fixed>
+      <span>&copy; 2024 Script Genie</span>
+    </v-footer>
+    <router-view />
+  </v-app>
 </template>
 
 <script>
-import LoginModal from './components/LoginModal.vue';
 import { mapGetters } from 'vuex'; // Import mapGetters from Vuex
 
 export default {
   data() {
     return {
-      showLoginModal: false,
-      currentModalComponent: null,
+      drawer: false,
     };
   },
   computed: {
@@ -32,6 +37,18 @@ export default {
     },
     scriptGenieLink() {
       return this.loggedIn ? '/script-genie-w-account' : '/script-genie-wo-account'; // Dynamically set Script Genie link based on authentication status
+    },
+    links() {
+      // Define your navigation links here
+      return [
+        { text: 'Home', to: '/' },
+        { text: 'Profile', to: '/profile', authenticated: true },
+        { text: 'About', to: '/about' },
+        { text: 'Script Genie', to: this.scriptGenieLink },
+      ];
+    },
+    filteredLinks() {
+      return this.links.filter(link => !link.authenticated || this.loggedIn);
     }
   },
   methods: {
@@ -45,12 +62,11 @@ export default {
       this.currentModalComponent = null;
     },
   },
-  components: {
-    LoginModal,
-  },
 };
 </script>
 
-<style>
-/* Your global styles here */
+<style scoped>
+body {
+  backbround-color: #F1F1F1
+}
 </style>

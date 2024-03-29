@@ -1,4 +1,8 @@
 <template>
+  <br>
+  <br>
+  <br>
+  <br>
     <h1 align="center">Script Genie</h1>
   <form @submit.prevent="submitForm">
     <!-- Dropdowns for organizations, and sport -->
