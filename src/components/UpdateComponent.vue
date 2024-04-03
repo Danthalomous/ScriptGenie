@@ -1,109 +1,112 @@
 <template>
-    <div>
-      <form @submit.prevent="submitForm">
-        <!-- Organization Div -->
-        <div>
-          <div>
-            <label for="venueName">Venue Name:</label>
-            <input type="text" id="venueName" v-model="organizationData.venueName">
-          </div>
-          <div>
-            <label for="facilityName">Facility Name:</label>
-            <input type="text" id="facilityName" v-model="organizationData.facilityName">
-          </div>
-          <div>
-            <label for="organizationName">Organization Name:</label>
-            <input type="text" id="organizationName" v-model="organizationData.organizationName">
-          </div>
-          <div>
-            <label for="teamName">Team Name:</label>
-            <input type="text" id="teamName" v-model="organizationData.teamName">
-          </div>
-          <div>
-            <label for="conferenceRelevance">Conference Relevance:</label>
-            <select id="conferenceRelevance" v-model="organizationData.conferenceRelevance">
-              <option value="">Select</option>
-              <option value="1A">1A</option>
-              <option value="1B">1B</option>
-              <option value="1C">1C</option>
-              <option value="2A">2A</option>
-              <option value="2B">2B</option>
-              <option value="2C">2C</option>
-              <option value="3A">3A</option>
-              <option value="3B">3B</option>
-              <option value="3C">3C</option>
-              <option value="4A">4A</option>
-              <option value="4B">4B</option>
-              <option value="4C">4C</option>
-              <option value="5A">5A</option>
-              <option value="5B">5B</option>
-              <option value="5C">5C</option>
-              <option value="6A">6A</option>
-              <option value="6B">6B</option>
-              <option value="6C">6C</option>
-            </select>
-          </div>
-          <div>
-            <label for="competitionLevel">Competition Level:</label>
-            <input type="text" id="competitionLevel" v-model="organizationData.competitionLevel">
-          </div>
-        </div>
-        <!-- Roster Div -->
-    <div v-for="(roster, rosterIndex) in organizationData.rosters" :key="rosterIndex">
-      <div>
-        <label :for="'rosterName' + rosterIndex">Roster Name:</label>
-        <input :type="'text'" :id="'rosterName' + rosterIndex" v-model="roster.rosterName">
-      </div>
-      <div>
-        <label :for="'coachName' + rosterIndex">Coach Name:</label>
-        <input :type="'text'" :id="'coachName' + rosterIndex" v-model="roster.coachName">
-      </div>
-      <div>
-        <label for="playerName">Player Name:</label>
-        <input type="text" id="playerName" v-model="player.playerName">
-      </div>
-      <div>
-        <label for="playerPosition">Player Position:</label>
-        <input type="text" id="playerPosition" v-model="player.playerPosition">
-      </div>
-      <div>
-        <label for="playerNumber">Player Number:</label>
-        <input type="number" id="playerNumber" v-model="player.playerNumber">
-      </div>
-      <div>
-        <label for="playerIsStarting">Player Is Starting:</label>
-        <input type="checkbox" id="playerIsStarting" v-model="player.playerIsStarting">
-      </div>
-      <button type="button" @click="addPlayer(rosterIndex)">Add Player</button>
-      <ul>
-        <!-- Display players of the current roster -->
-        <li v-for="player in roster.players" :key="player.id">
+  <v-container>
+    <v-form @submit.prevent="submitForm">
+      <!-- Organization Div -->
+      <v-row>
+        <v-col cols="12">
+          <v-row>
+            <v-col cols="6">
+              <v-text-field v-model="organizationData.venueName" label="Venue Name" outlined></v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field v-model="organizationData.facilityName" label="Facility Name" outlined></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="6">
+              <v-text-field v-model="organizationData.organizationName" label="Organization Name" outlined></v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field v-model="organizationData.teamName" label="Team Name" outlined></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <select id="conferenceRelevance" v-model="organizationData.ConferenceRelevance">
+            <option value="">Select Conference Relevance</option>
+            <option value="1A">1A</option>
+            <option value="1B">1B</option>
+            <option value="1C">1C</option>
+            <option value="2A">2A</option>
+            <option value="2B">2B</option>
+            <option value="2C">2C</option>
+            <option value="3A">3A</option>
+            <option value="3B">3B</option>
+            <option value="3C">3C</option>
+            <option value="4A">4A</option>
+            <option value="4B">4B</option>
+            <option value="4C">4C</option>
+            <option value="5A">5A</option>
+            <option value="5B">5B</option>
+            <option value="5C">5C</option>
+            <option value="6A">6A</option>
+            <option value="6B">6B</option>
+            <option value="6C">6C</option>
+          </select>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field v-model="organizationData.competitionLevel" label="Competition Level" outlined></v-text-field>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+
+      <!-- Roster Div -->
+      <v-row v-for="(roster, index) in organizationData.rosters" :key="index">
+        <v-col cols="12">
+          <v-text-field v-model="roster.rosterName" label="Roster Name" outlined></v-text-field>
+        </v-col>
+        <v-col cols="12">
+          <v-text-field v-model="roster.coachName" label="Coach Name" outlined></v-text-field>
+        </v-col>
+        <v-col cols="12">
+          <h2>Add Players:</h2>
+        </v-col>
+        <v-col cols="12">
+          <v-text-field v-model="player.playerName" label="Player Name" outlined></v-text-field>
+        </v-col>
+        <v-col cols="12">
+          <v-text-field v-model="player.playerPosition" label="Player Position" outlined></v-text-field>
+        </v-col>
+        <v-col cols="12">
+          <v-text-field v-model="player.playerNumber" label="Player Number" type="number" outlined></v-text-field>
+        </v-col>
+        <v-col cols="12">
+          <v-checkbox v-model="player.playerIsStarting" label="Player Is Starting"></v-checkbox>
+        </v-col>
+        <v-col cols="12">
+          <v-btn @click="addPlayer(index)">Add Player</v-btn>
+<v-list>
+  <v-list-item v-for="(player, index) in roster.roster" :key="index">
+    <v-list-item-content>
+      <v-row align="center">
+        <v-col cols="10">
           {{ player.playerName }}
-        </li>
-      </ul>
-    </div>
-    <!-- Display all players -->
-    <div>
-      <h3>All Players</h3>
-      <ul>
-        <li v-for="(roster, rosterIndex) in organizationData.rosters" :key="rosterIndex">
-          <ul>
-            <li v-for="player in roster.roster" :key="player.id">
-              {{ player.playerName }}
-              <button type="button" @click="deletePlayer(player, rosterIndex)">Delete Player</button>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-        <br>
-        <button type="submit">Update</button>
-      </form>
+        </v-col>
+        <v-col cols="2">
+          <v-btn color="#FF5964" @click="deletePlayer(index)">Delete Player</v-btn>
+        </v-col>
+      </v-row>
+    </v-list-item-content>
+  </v-list-item>
+</v-list>
+
+        </v-col>
+      </v-row>
+
+      <v-btn color="#00D9FF" type="submit" block><p class="custom-font-color">Update</p></v-btn>
       <br>
-      <!-- Delete button -->
-      <button type="button" @click="deleteData">Delete Organization</button>
-    </div>
-  </template>
+      <br>
+      <br>
+    </v-form>
+    <!-- Delete button -->
+    <v-btn color="#FF0000" @click="deleteData" block><p class="custom-font-color">Delete Organization</p></v-btn>
+  </v-container>
+  <br>
+  <br>
+</template>
   
   <script>
   import axios from 'axios';
@@ -295,6 +298,56 @@
   </script>
   
   <style scoped>
-  /* Add your component-specific styles here */
-  </style>
-  
+<styl scoped>
+.error-message {
+  color: red;
+  font-size: 0.8rem;
+}
+
+.custom-font-color {
+  color: #f2f2f2;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #ccc; /* Add border */
+  padding: 8px;
+  font-size: 16px;
+  width:100%;
+  box-sizing: border-box;
+  background-color: #fff;
+  cursor: pointer;
+  margin-bottom: 20px;
+  border-radius: 4px; /* Add border-radius for rounded corners */
+  position: relative; /* Add relative position for custom arrow icon */
+}
+
+/* Custom arrow icon */
+select::after {
+  content: '\25BC'; /* Unicode character for down arrow */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Hover state */
+select:hover {
+  border-color: #aaa;
+}
+
+/* Focus state */
+select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Disabled state */
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+</style>  

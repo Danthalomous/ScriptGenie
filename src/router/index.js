@@ -28,12 +28,18 @@ const router = createRouter({
     {
       path: '/script-genie-w-account',
       name: 'script-genie-w-account',
+      params: {
+        selectedSport: null,
+      },
       component: ScriptGenieViewWAccount,
       meta: { requiresAuth: true }, // meta field for authentication check
     },
     {
       path: '/script-genie-wo-account',
       name: 'script-genie-wo-account',
+      params: {
+        selectedSport: '',
+      },
       component: ScriptGenieViewWOAccount,
     }
   ]

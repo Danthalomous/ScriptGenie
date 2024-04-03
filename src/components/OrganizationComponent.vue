@@ -1,40 +1,33 @@
 <template>
-  <div>
-    <form @submit.prevent="submitForm">
+  <v-container>
+    <v-form @submit.prevent="submitForm">
       <!-- Organization Div -->
-      <div>
-        <div>
-          <label for="venueName">Venue Name:</label>
-          <input type="text" id="venueName" v-model="organizationData.VenueName">
-          <span v-if="!isValidAlphabetic(organizationData.VenueName)" class="error-message">
-            The Venue Name should only have alphabetic characters.
-          </span>
-        </div>
-        <div>
-          <label for="facilityName">Facility Name:</label>
-          <input type="text" id="facilityName" v-model="organizationData.FacilityName">
-          <span v-if="!isValidAlphabetic(organizationData.FacilityName)" class="error-message">
-            The Facility Name should only have alphabetic characters.
-          </span>
-        </div>
-        <div>
-          <label for="organizationName">Organization Name:</label>
-          <input type="text" id="organizationName" v-model="organizationData.OrganizationName">
-          <span v-if="!isValidAlphabetic(organizationData.OrganizationName)" class="error-message">
-            The Organization Name should only have alphabetic characters.
-          </span>
-        </div>
-        <div>
-          <label for="teamName">Team Name:</label>
-          <input type="text" id="teamName" v-model="organizationData.TeamName">
-          <span v-if="!isValidAlphabetic(organizationData.TeamName)" class="error-message">
-            The Team Name should only have alphabetic characters.
-          </span>
-        </div>
-        <div>
-          <label for="conferenceRelevance">Conference Relevance:</label>
-          <select id="conferenceRelevance" v-model="organizationData.ConferenceRelevance">
-            <option value="">Select</option>
+      <v-row>
+        <v-col cols="12">
+          <v-row>
+            <v-col cols="6">
+              <v-text-field v-model="organizationData.VenueName" label="Venue Name" outlined></v-text-field>
+              <span v-if="!isValidAlphabetic(organizationData.VenueName)" class="error-message">The Venue Name should only have alphabetic characters.</span>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field v-model="organizationData.FacilityName" label="Facility Name" outlined></v-text-field>
+              <span v-if="!isValidAlphabetic(organizationData.FacilityName)" class="error-message">The Facility Name should only have alphabetic characters.</span>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="6">
+              <v-text-field v-model="organizationData.OrganizationName" label="Organization Name" outlined></v-text-field>
+              <span v-if="!isValidAlphabetic(organizationData.OrganizationName)" class="error-message">The Organization Name should only have alphabetic characters.</span>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field v-model="organizationData.TeamName" label="Team Name" outlined></v-text-field>
+              <span v-if="!isValidAlphabetic(organizationData.TeamName)" class="error-message">The Team Name should only have alphabetic characters.</span>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <select id="conferenceRelevance" v-model="organizationData.ConferenceRelevance">
+            <option value="">Select Conference Relevance</option>
             <option value="1A">1A</option>
             <option value="1B">1B</option>
             <option value="1C">1C</option>
@@ -54,73 +47,73 @@
             <option value="6B">6B</option>
             <option value="6C">6C</option>
           </select>
-        </div>
-        <div>
-          <label for="competitionLevel">Competition Level:</label>
-          <input type="text" id="competitionLevel" v-model="organizationData.CompetitionLevel">
-          <span v-if="!isValidAlphaNumeric(organizationData.CompetitionLevel)" class="error-message">
-            The Competition Level should only have alpha-numeric characters.
-          </span>
-        </div>
-      </div>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field v-model="organizationData.CompetitionLevel" label="Competition Level" outlined></v-text-field>
+              <span v-if="!isValidAlphaNumeric(organizationData.CompetitionLevel)" class="error-message">The Competition Level should only have alpha-numeric characters.</span>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+
       <!-- Roster Div -->
-      <div>
-        <div>
-          <label for="rosterName">Roster Name:</label>
-          <input type="text" id="rosterName" v-model="roster.rosterName">
-          <span v-if="!isValidAlphabetic(roster.rosterName)" class="error-message">
-            A Roster Name should only contain alphabetic characters.
-          </span>
-        </div>
-        <div>
-          <label for="coachName">Coach Name:</label>
-          <input type="text" id="coachName" v-model="roster.coachName">
-          <span v-if="!isValidAlphabetic(roster.coachName)" class="error-message">
-            A Coach Name should only contain alphabetic characters.
-          </span>
-        </div>
-        <div>
-          <label for="roster">Rosters:</label>
-          <div>
-            <div>
-              <label for="playerName">Player Name:</label>
-              <input type="text" id="playerName" v-model="player.playerName">
-              <span v-if="!isValidAlphabetic(player.playerName)" class="error-message">
-                A Player Name should only contain alphabetic characters.
-              </span>
-            </div>
-            <div>
-              <label for="playerPosition">Player Position:</label>
-              <input type="text" id="playerPosition" v-model="player.playerPosition">
-              <span v-if="!isValidAlphabetic(player.playerPosition)" class="error-message">
-                A Player Position should only contain alphabetic characters.
-              </span>
-            </div>
-            <div>
-              <label for="playerNumber">Player Number:</label>
-              <input type="number" id="playerNumber" v-model="player.playerNumber">
-            </div>
-            <div>
-              <label for="playerIsStarting">Player Is Starting:</label>
-              <input type="checkbox" id="playerIsStarting" v-model="player.playerIsStarting">
-            </div>
-          </div>
-          <button type="button" @click="addPlayer">Add Player</button>
-          <ul>
-            <li v-for="player in roster.players" :key="player.id">
-              {{ player.playerName }}
-              <button type="button" @click="deletePlayer">Delete Player</button>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <button type="submit">Submit</button>
-    </form>
-  </div>
+      <v-row>
+        <v-col cols="12">
+          <v-text-field v-model="roster.rosterName" label="Roster Name" outlined></v-text-field>
+          <span v-if="!isValidAlphabetic(roster.rosterName)" class="error-message">A Roster Name should only contain alphabetic characters.</span>
+        </v-col>
+        <v-col cols="12">
+          <v-text-field v-model="roster.coachName" label="Coach Name" outlined></v-text-field>
+          <span v-if="!isValidAlphabetic(roster.coachName)" class="error-message">A Coach Name should only contain alphabetic characters.</span>
+        </v-col>
+        <v-col cols="12">
+          <h2>Add Players:</h2>
+        </v-col>
+        <v-col cols="12">
+          <v-text-field v-model="player.playerName" label="Player Name" outlined></v-text-field>
+          <span v-if="!isValidAlphabetic(player.playerName)" class="error-message">A Player Name should only contain alphabetic characters.</span>
+        </v-col>
+        <v-col cols="12">
+          <v-text-field v-model="player.playerPosition" label="Player Position" outlined></v-text-field>
+          <span v-if="!isValidAlphabetic(player.playerPosition)" class="error-message">A Player Position should only contain alphabetic characters.</span>
+        </v-col>
+        <v-col cols="12">
+          <v-text-field v-model="player.playerNumber" label="Player Number" type="number" outlined></v-text-field>
+        </v-col>
+        <v-col cols="12">
+          <v-checkbox v-model="player.playerIsStarting" label="Player Is Starting"></v-checkbox>
+        </v-col>
+        <v-col cols="12">
+          <v-btn @click="addPlayer">Add Player</v-btn>
+<v-list>
+  <v-list-item v-for="(player, index) in roster.players" :key="index">
+    <v-list-item-content>
+      <v-row align="center">
+        <v-col cols="10">
+          {{ player.playerName }}
+        </v-col>
+        <v-col cols="2">
+          <v-btn color="#FF5964" @click="deletePlayer(index)">Delete Player</v-btn>
+        </v-col>
+      </v-row>
+    </v-list-item-content>
+  </v-list-item>
+</v-list>
+
+        </v-col>
+      </v-row>
+
+      <v-btn color="#00D9FF" type="submit" block><p class="custom-font-color">Create Organziation</p></v-btn>
+      <br>
+      <br>
+      <br>
+    </v-form>
+  </v-container>
 </template>
 
 <script>
-import router from '@/router';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -319,9 +312,56 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .error-message {
   color: red;
   font-size: 0.8rem;
+}
+
+.custom-font-color {
+  color: #f2f2f2;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #ccc; /* Add border */
+  padding: 8px;
+  font-size: 16px;
+  width:100%;
+  box-sizing: border-box;
+  background-color: #fff;
+  cursor: pointer;
+  margin-bottom: 20px;
+  border-radius: 4px; /* Add border-radius for rounded corners */
+  position: relative; /* Add relative position for custom arrow icon */
+}
+
+/* Custom arrow icon */
+select::after {
+  content: '\25BC'; /* Unicode character for down arrow */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Hover state */
+select:hover {
+  border-color: #aaa;
+}
+
+/* Focus state */
+select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Disabled state */
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>

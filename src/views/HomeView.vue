@@ -19,8 +19,6 @@
           <br>
           <br>
           <br>
-          <br>
-          <br>
         </div>
         <h2 align="center" class="custom-font-color">Max-Pro Scripts</h2>
         <div align="center" id="nav">
@@ -54,7 +52,7 @@
         <br>
         <v-container>
           <v-row class="justify-center">
-            <v-card v-if="loggedIn" :variant="elevated" width="175" height="250" link color="#FF5964" hover>
+            <v-card v-if="loggedIn" :variant="elevated" width="175" height="250" href="/profile" color="#FF5964" hover>
               <v-card-item>
                   <br>
                   <div class="text-h6 mb-1" align="center">
@@ -66,7 +64,7 @@
                   </div>
               </v-card-item>
             </v-card>
-            <v-card class="custom-card" :variant="elevated" width="175" height="250" link hover>
+            <v-card class="custom-card" :variant="elevated" width="175" height="250" @click="generateUrl('Football')" hover>
               <v-card-item>
                   <br>
                   <div class="text-h6 mb-1" align="center">
@@ -78,7 +76,7 @@
                   </div>
               </v-card-item>
             </v-card>
-            <v-card class="custom-card" :variant="elevated" width="175" height="250" link hover>
+            <v-card class="custom-card" :variant="elevated" width="175" height="250" @click="generateUrl('Basketball')" hover>
               <v-card-item>
                   <br>
                   <div class="text-h6 mb-1" align="center">
@@ -90,7 +88,7 @@
                   </div>
               </v-card-item>
             </v-card>
-            <v-card class="custom-card" :variant="elevated" width="175" height="250" link hover>
+            <v-card class="custom-card" :variant="elevated" width="175" height="250" @click="generateUrl('Volleyball')" hover>
               <v-card-item>
                   <br>
                   <div class="text-h6 mb-1" align="center">
@@ -174,7 +172,10 @@
       },
       scriptGenieLink() {
         return this.loggedIn ? '/script-genie-w-account' : '/script-genie-wo-account'; // Dynamically set Script Genie link based on authentication status
-      }
+      },
+      scriptGenieLinkName() {
+        return this.loggedIn ? 'script-genie-w-account' : 'script-genie-wo-account';
+      },
     },
     methods: {
       toggleModal() {
@@ -191,6 +192,16 @@
 
         this.$router.push(route);
       },
+      navigateToProfile() {
+        const route = '/profile';
+
+        this.$router.push(route);
+      },
+      generateUrl(paramValue) {
+        const route = this.scriptGenieLinkName + '?selectedSport=' + paramValue;
+
+        this.$router.push(route);
+      }
     },
     components: {
       LoginModal,

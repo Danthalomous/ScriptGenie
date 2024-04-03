@@ -3,64 +3,66 @@
   <br>
   <br>
   <br>
-    <h1 align="center">Script Genie</h1>
-  <form @submit.prevent="submitForm">
+    <h1 align="center" class="custom-font">Script Genie</h1>
+  <br>
+  <v-container>
+    <v-form @submit.prevent="submitForm">
     <!-- Dropdowns for organizations, and sport -->
-    <div align="center">
-      <label for="sport">Select Sport:</label>
+    <div class="dropdown-container" align="center">
         <select id="sport" v-model="selectedSport">
+          <option value="" disabled selected>Select a sport</option> 
           <option v-for="sport in sports" :key="sport">{{ sport }}</option>
         </select>
-        <label for="homeOrganization">Home Organization:</label>
         <select id="homeOrganization" v-model="selectedHomeOrganization" @change="updateHomeOrganization">
+          <option value="" disabled selected>Select a home organization</option> 
           <option value="">Other</option>
           <option v-for="org in organizations" :key="org.OrganizationID" :value="org">{{ org.organizationName }}</option>
         </select>
-        <label for="awayOrganization">Away Organization:</label>
         <select id="awayOrganization" v-model="selectedAwayOrganization" @change="updateAwayOrganization">
+          <option value="" disabled selected>Select an away organization</option> 
           <option value="">Other</option>
           <option v-for="org in organizations" :key="org.OrganizationID" :value="org">{{ org.organizationName }}</option>
         </select>
-      </div>
+    </div>
+    <br>
       <div align="center">
-        <label>Date:</label>
+        <label>Date of Event: </label>
         <input type="date" v-model="dateAndTime" />
       </div>
-    <!-- Home Organization -->
-    <div>
-        <h2>Home Organization:</h2>
+    <br>
+    <br>
+    <v-row justify="center">
+      <!-- Home Organization -->
+      <v-col>
+        <h3>Home Organization:</h3>
+        <br>
         <div>
-          <label for="venueName">Venue Name:</label>
-          <input type="text" id="venueName" v-model="homeOrganizationData.VenueName">
+          <v-text-field clearable label="Venue Name" variant="outlined" v-model="homeOrganizationData.VenueName" />
           <span v-if="!isValidAlphabetic(homeOrganizationData.VenueName)" class="error-message">
             The Venue Name should only have alphabetic characters.
           </span>
         </div>
         <div>
-          <label for="facilityName">Facility Name:</label>
-          <input type="text" id="facilityName" v-model="homeOrganizationData.FacilityName">
+          <v-text-field clearable label="Facility Name" variant="outlined" v-model="homeOrganizationData.FacilityName" />
           <span v-if="!isValidAlphabetic(homeOrganizationData.FacilityName)" class="error-message">
             The Facility Name should only have alphabetic characters.
           </span>
         </div>
         <div>
-          <label for="organizationName">Organization Name:</label>
-          <input type="text" id="organizationName" v-model="homeOrganizationData.OrganizationName">
+          <v-text-field clearable label="Organization Name" variant="outlined" v-model="homeOrganizationData.OrganizationName" />
           <span v-if="!isValidAlphabetic(homeOrganizationData.OrganizationName)" class="error-message">
             The Organization Name should only have alphabetic characters.
           </span>
         </div>
         <div>
-          <label for="teamName">Team Name:</label>
-          <input type="text" id="teamName" v-model="homeOrganizationData.TeamName">
+          <v-text-field clearable label="Team Name" variant="outlined" v-model="homeOrganizationData.TeamName" />
           <span v-if="!isValidAlphabetic(homeOrganizationData.TeamName)" class="error-message">
             The Team Name should only have alphabetic characters.
           </span>
         </div>
         <div>
-          <label for="conferenceRelevance">Conference Relevance:</label>
           <select id="conferenceRelevance" v-model="homeOrganizationData.ConferenceRelevance">
-            <option value="">Select</option>
+            <option value="">Select Conference Relevance</option>
             <option value="1A">1A</option>
             <option value="1B">1B</option>
             <option value="1C">1C</option>
@@ -82,48 +84,43 @@
           </select>
         </div>
         <div>
-          <label for="competitionLevel">Competition Level:</label>
-          <input type="text" id="competitionLevel" v-model="homeOrganizationData.CompetitionLevel">
+          <v-text-field clearable label="Competition Level" variant="outlined" v-model="homeOrganizationData.CompetitionLevel" />
           <span v-if="!isValidAlphaNumeric(homeOrganizationData.CompetitionLevel)" class="error-message">
             The Competition Level should only have alpha-numeric characters.
           </span>
         </div>
-    </div>
-    <!-- Away Organization -->
-    <div>
-        <h2>Away Organization:</h2>
+      </v-col>
+      <!-- Away Organization -->
+      <v-col>
+        <h3>Away Organization:</h3>
+        <br>
         <div>
-          <label for="venueName">Venue Name:</label>
-          <input type="text" id="venueName" v-model="awayOrganizationData.VenueName">
+          <v-text-field clearable label="Venue Name" variant="outlined" v-model="awayOrganizationData.VenueName" />
           <span v-if="!isValidAlphabetic(awayOrganizationData.VenueName)" class="error-message">
             The Venue Name should only have alphabetic characters.
           </span>
         </div>
         <div>
-          <label for="facilityName">Facility Name:</label>
-          <input type="text" id="facilityName" v-model="awayOrganizationData.FacilityName">
+          <v-text-field clearable label="Facility Name" variant="outlined" v-model="awayOrganizationData.FacilityName" />
           <span v-if="!isValidAlphabetic(awayOrganizationData.FacilityName)" class="error-message">
             The Facility Name should only have alphabetic characters.
           </span>
         </div>
         <div>
-          <label for="organizationName">Organization Name:</label>
-          <input type="text" id="organizationName" v-model="awayOrganizationData.OrganizationName">
+          <v-text-field clearable label="Organization Name" variant="outlined" v-model="awayOrganizationData.OrganizationName" />
           <span v-if="!isValidAlphabetic(awayOrganizationData.OrganizationName)" class="error-message">
             The Organization Name should only have alphabetic characters.
           </span>
         </div>
         <div>
-          <label for="teamName">Team Name:</label>
-          <input type="text" id="teamName" v-model="awayOrganizationData.TeamName">
+          <v-text-field clearable label="Team Name" variant="outlined" v-model="awayOrganizationData.TeamName" />
           <span v-if="!isValidAlphabetic(awayOrganizationData.TeamName)" class="error-message">
             The Team Name should only have alphabetic characters.
           </span>
         </div>
         <div>
-          <label for="conferenceRelevance">Conference Relevance:</label>
           <select id="conferenceRelevance" v-model="awayOrganizationData.ConferenceRelevance">
-            <option value="">Select</option>
+            <option value="">Select Conference Relevance</option>
             <option value="1A">1A</option>
             <option value="1B">1B</option>
             <option value="1C">1C</option>
@@ -145,135 +142,69 @@
           </select>
         </div>
         <div>
-          <label for="competitionLevel">Competition Level:</label>
-          <input type="text" id="competitionLevel" v-model="awayOrganizationData.CompetitionLevel">
+          <v-text-field clearable label="Competition Level" variant="outlined" v-model="awayOrganizationData.CompetitionLevel" />
           <span v-if="!isValidAlphaNumeric(awayOrganizationData.CompetitionLevel)" class="error-message">
             The Competition Level should only have alpha-numeric characters.
           </span>
         </div>
-    </div> 
+      </v-col> 
+    </v-row>
     <!-- PAA Messages -->
     <div>
         <h3>PAA Messages (please check all messages you want to include in your script):</h3>
         <!-- Check boxes for the computed properties and PAA messages -->
         <div>
-            <input 
-                type="checkbox" 
-                id="welcomeMessage" 
-                v-model="welcomeMessage.enabled"
-                @change="updateWelcomeMessageEnabled()"
-                >
-            <label for="welcomeMessage">Welcome Message</label>
+            <v-checkbox label="Welcome Message" v-model="welcomeMessage.enabled" @change="updateWelcomeMessageEnabled()"></v-checkbox>
         </div>
         <div>
-            <input 
-                type="checkbox" 
-                id="liveStream" 
-                v-model="liveStream.enabled"
-                @change="updateLiveStreamEnabled()"
-                >
-            <label for="liveStream">Live Stream</label>
-            <input
-                type="text"
-                id="liveStreamMessage"
-                v-model="liveStream.network"
-            >
+          <v-checkbox label="Live Stream" v-model="liveStream.enabled" @change="updateLiveStreamEnabled()"></v-checkbox>
+          <v-text-field clearable :disabled="!liveStream.enabled" label="Live Stream Provider" variant="outlined" v-model="liveStream.network" />
             <span v-if="!isValidAlphabetic(liveStream.network)" class="error-message">
             The Live Stream provider should only have alphabetic characters.
           </span>
         </div>
         <div>
-            <input 
-                type="checkbox" 
-                id="sportsmanship" 
-                v-model="sportsmanship.enabled"
-                @change="updateSportsmanshipEnabled()"
-                >
-            <label for="sportsmanship">Sportsmanship</label>
-            <input
-                type="text"
-                id="sportsmanshipPolicy"
-                v-model="sportsmanship.governingAuthority"
-            >
+          <v-checkbox label="Sportsmanship" v-model="sportsmanship.enabled" @change="updateSportsmanshipEnabled()"></v-checkbox>
+          <v-text-field clearable :disabled="!sportsmanship.enabled" label="Sportsmanship Governing Authority" variant="outlined" v-model="sportsmanship.governingAuthority" />
             <span v-if="!isValidAlphaNumeric(sportsmanship.governingAuthority)" class="error-message">
             The Governing Authority should only have alphabetic characters.
           </span>
         </div>
         <div>
-            <input 
-                type="checkbox" 
-                id="concessions" 
-                v-model="concessions.enabled"
-                @change="updateConcessionsEnabled()"
-                >
-            <label for="concessions">Concessions</label>
+          <v-checkbox label="Concessions" v-model="concessions.enabled" @change="updateConcessionsEnabled()"></v-checkbox>
         </div>
         <div>
-            <input 
-                type="checkbox" 
-                id="merchandise" 
-                v-model="merchandise.enabled"
-                @change="updateMerchandiseEnabled()"
-                >
-            <label for="merchandise">Merchandise Plug</label>
+          <v-checkbox label="Merchandise" v-model="merchandise.enabled" @change="updateMerchandiseEnabled()"></v-checkbox>
         </div>
         <div>
-            <input 
-                type="checkbox" 
-                id="referees" 
-                v-model="referees.enabled"
-                @change="updateRefereesEnabled()"
-                >
-            <label for="checkbox">Referees</label>
+          <v-checkbox label="Referees" v-model="referees.enabled" @change="updateRefereesEnabled()"></v-checkbox>
         </div>
         <div>
-          <input 
-                type="checkbox" 
-                id="endOfEvent" 
-                v-model="endOfEvent.enabled"
-                @change="updateEndOfEventEnabled()"
-                >
-            <label for="endOfEvent">End Of Event Message</label>
+          <v-checkbox label="End Of Event Message" v-model="endOfEvent.enabled" @change="updateEndOfEventEnabled()"></v-checkbox>
         </div>
         <div>
-          <input 
-                type="checkbox" 
-                id="goodbyeMessage" 
-                v-model="goodbyeMessage.enabled"
-                @change="updateGoodbyeMessageEnabled()"
-                >
-            <label for="goodbyeMessage">Goodbye Message</label>
+          <v-checkbox label="Goodbye Message" v-model="goodbyeMessage.enabled" @change="updateGoodbyeMessageEnabled()"></v-checkbox>
         </div>
         <div>
-          <input 
-                type="checkbox" 
-                id="nextGame" 
-                v-model="nextGameData.enabled"
-                @change="updateNextGameDataEnabled()"
-                >
-            <label for="nextGame">Next Game Info: </label>
+          <v-checkbox label="Next Game Info" v-model="nextGameData.enabled" @change="updateNextGameDataEnabled()"></v-checkbox>
             <div v-if="nextGameData.enabled">
               <label>Date:</label>
               <input type="date" v-model="nextGameData.date" />
               <br>
-
-              <!-- TODO: Add the ability to select existing organization to autofill these -->
-              <label>Opponent Name:</label>
-              <input type="text" v-model="nextGameData.nextOpponentName" />
+              <br>
+              <v-text-field clearable label="Opponent Name" variant="outlined" v-model="nextGameData.nextOpponentName" />
               <span v-if="!isValidAlphabetic(nextGameData.nextOpponentName)" class="error-message">
                 The Opponent Name should only have alphabetic characters.
               </span>
               <br>
 
-              <label>Opponent Mascot:</label>
-              <input type="text" v-model="nextGameData.nextOpponentMascot" />
+              <v-text-field clearable label="Opponent Mascot" variant="outlined" v-model="nextGameData.nextOpponentMascot" />
               <span v-if="!isValidAlphabetic(nextGameData.nextOpponentMascot)" class="error-message">
                 The Opponent Mascot should only have alphabetic characters.
               </span>
               <br>
 
-              <label>Game Location:</label>
-              <input type="text" v-model="nextGameData.nextGameLocation" />
+              <v-text-field clearable label="Game Location" variant="outlined" v-model="nextGameData.nextGameLocation" />
               <span v-if="!isValidAlphabetic(nextGameData.nextGameLocation)" class="error-message">
                 The Game Location should only have alphabetic characters.
               </span>
@@ -281,74 +212,32 @@
             </div>
         </div>
         <div>
-            <input 
-                type="checkbox" 
-                id="prayer" 
-                v-model="prayer.enabled"
-                @change="updatePrayerEnabled()"
-                >
-            <label for="prayer">Prayer:</label>
-            <br>
-            <label for="prayerPerson">Name of Person Praying: </label>
-            <input
-                type="text"
-                id="prayerPerson"
-                v-model="prayer.personPraying"
-            >
+          <v-checkbox label="Prayer" v-model="prayer.enabled" @change="updatePrayerEnabled()"></v-checkbox>
+          <v-text-field clearable :disabled="!prayer.enabled" label="Name of Person Praying" variant="outlined" v-model="prayer.personPraying" />
             <span v-if="!isValidAlphabetic(prayer.personPraying)" class="error-message">
             The Person Praying should only have alphabetic characters.
           </span>
         </div>
         <div>
-            <input 
-                type="checkbox" 
-                id="nationalAnthem" 
-                v-model="nationalAnthem.enabled"
-                @change="updateNationalAnthemEnabled()"
-                >
-            <label for="nationalAnthem">National Anthem:</label>
-            <br>
-            <label for="nationalAnthemSinger">National Anthem Performers: </label>
-            <input
-                type="text"
-                id="nationalAnthemSinger"
-                v-model="nationalAnthem.personSinging"
-            >
+          <v-checkbox label="National Anthem" v-model="nationalAnthem.enabled" @change="updateNationalAnthemEnabled()"></v-checkbox>
+          <v-text-field clearable :disabled="!nationalAnthem.enabled" label="National Anthem Performers" variant="outlined" v-model="nationalAnthem.personSinging" />
             <span v-if="!isValidAlphabetic(nationalAnthem.personSinging)" class="error-message">
             The Person(s) Performing should only have alphabetic characters.
           </span>
         </div>
         <div>
-          <input 
-                type="checkbox" 
-                id="roster" 
-                v-model="rosters.enabled"
-                @change="updateRosterEnabled()"
-                >
-            <label for="roster">Rosters: </label>
+          <v-checkbox label="Rosters" v-model="rosters.enabled" @change="updateRosterEnabled()"></v-checkbox>
             <div v-if="rosters.enabled">
-              <input 
-                type="checkbox" 
-                id="homeRoster" 
-                v-model="rosters.homeRosterEnabled"
-                @change="updateHomeRosterEnabled()"
-                >
-              <label for="homeRoster">Home Roster: </label>
-              <!-- Add dropdown with existing rosters for home organization -->
-            <br>
-            <input 
-                type="checkbox" 
-                id="awayRoster" 
-                v-model="rosters.awayRosterEnabled"
-                @change="updateAwayRosterEnabled()"
-                >
-            <label for="awayRoster">Away Roster: </label>
-            <!-- TODO: Add dropdown with existing rosters for away organization -->
+              <v-checkbox label="Home Roster" v-model="rosters.homeRosterEnabled" @change="updateHomeRosterEnabled()"></v-checkbox>
+              <v-checkbox label="Away Roster" v-model="rosters.awayRosterEnabled" @change="updateAwayRosterEnabled()"></v-checkbox>
             </div>
         </div>
     </div>
-      <button type="submit">Generate Script</button>
-   </form>
+      <v-btn color="#FF5964" type="submit" block>Generate Script</v-btn>
+   </v-form>
+   <br>
+   <br>
+  </v-container>
 </template>
 
 <script>
@@ -361,8 +250,8 @@ export default {
       dateAndTime: new Date(),
       sports: ["Basketball", "Football", "Volleyball"],
       selectedSport: '',
-      selectedHomeOrganization: null,
-      selectedAwayOrganization: null,
+      selectedHomeOrganization: '',
+      selectedAwayOrganization: '',
       homeOrganizationData: {
         OrganizationID: '',
         VenueName: '',
@@ -705,6 +594,77 @@ if (this.rosters.awayRosterEnabled) {
   },
   mounted() {
     console.log(this.organizations);
+
+    console.log("Params: " + this.$route.query.selectedSport);
+    const routeParameter = this.$route.query.selectedSport;
+
+    if(routeParameter) {
+      this.selectedSport = routeParameter;
+    }
   },
 }
 </script>
+
+<style scoped>
+.custom-font {
+  font-family: 'Parisienne', sans-serif;
+}
+
+.dropdown-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-size: 16px;
+  width:100%;
+  box-sizing: border-box;
+  background-color: #fff;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+/* Custom arrow icon */
+select::after {
+  content: '\25BC'; /* Unicode character for down arrow */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Hover state */
+select:hover {
+  border-color: #aaa;
+}
+
+/* Focus state */
+select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Disabled state */
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+input[type="date"] {
+  border: 1px solid #ccc; /* Thin border */
+  padding: 5px; /* Optional: Add some padding */
+}
+
+.v-text-field {
+  width: 100%;
+}
+
+</style>
