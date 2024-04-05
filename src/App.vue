@@ -12,6 +12,9 @@
         <v-list-item v-for="link in filteredLinks" :key="link.to" link :to="link.to">
           <v-list-item-title>{{ link.text }}</v-list-item-title>
         </v-list-item>
+        <v-list-item link v-if="isAuthenticated" @click="logout">
+          <v-list-item-title>Logout</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-footer app color="#646464" fixed>
@@ -60,6 +63,12 @@ export default {
     closeModal() {
       this.showLoginModal = false;
       this.currentModalComponent = null;
+    },
+    logout() {
+      console.log("Logout called");
+      localStorage.removeItem("authToken");
+      this.$router.push('/');
+      window.location.reload(true);
     },
   },
 };

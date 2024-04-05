@@ -577,6 +577,13 @@
     },
     mounted() {
       console.log(this.organizations);
+
+      console.log("Params: " + this.$route.query.selectedSport);
+      const routeParameter = this.$route.query.selectedSport;
+
+      if(routeParameter) {
+        this.selectedSport = routeParameter;
+      }
     },
   }
   </script>

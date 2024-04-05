@@ -1,4 +1,3 @@
-<!-- LoginModal.vue -->
 <template>
   <div v-if="isVisible" class="modal-overlay">
     <div class="modal-content">
@@ -29,7 +28,21 @@
         <br>
         <button type="submit" class="submit-button"><p class="custom-font-color">Login</p></button>
         <br>
-        <p align="right" class="custom-font-color">Forgot Password?</p>
+        <p align="right" class="custom-font-color" @click="forgotPassword">Forgot Password?</p>
+      </form>
+      <!-- Forgot Password Form -->
+      <form v-if="activeTab === 'forgotPassword'" @submit.prevent="sendResetLink">
+        <div>
+          <input 
+            type="text" 
+            v-model="resetEmail" 
+            required 
+            placeholder="Email"
+            class="custom-input"
+          >
+        </div>
+        <br>
+        <button type="submit" class="submit-button"><p class="custom-font-color">Submit</p></button>
       </form>
       <!-- Register Form -->
       <form v-if="activeTab === 'register'" @submit.prevent="register">
@@ -81,6 +94,7 @@
 
 <script>
 import axios from 'axios';
+import emailjs from 'emailjs-com';
 
 export default {
   props: {
@@ -92,6 +106,7 @@ export default {
       email: '',
       password: '',
       confirmPassword: '',
+      resetEmail: '',
       emailFormatError: false,
       passwordLengthError: false,
       passwordSpecialCharError: false,
@@ -227,6 +242,44 @@ export default {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailRegex.test(email) && email.length > 0;
     },
+    forgotPassword() {
+      this.activeTab = 'forgotPassword';
+    },
+    async sendResetLink() {
+      try {
+        // Construct the data object
+        const userData = {
+          UserID: 'e7b0fd21-7f32-4d7e-8fd1-d4b9fcf7f77d',
+          Email: this.resetEmail,
+          Password: 'null'
+        };
+        
+      const response = await axios.post('https://localhost:7273/ForgotPassword/ProcessForgotPassword', userData);
+      const password = response.data;
+
+        // Configure email service
+        const serviceID = 'service_tuawbge';
+        const templateID = 'template_ni8743l';
+        const userID = '9-Odj59lfum86dfVE';
+
+        // Send email using emailjs
+        emailjs.init(userID);
+
+        const templateParams = {
+          to_email: this.resetEmail,
+          password: password // User's password obtained from the API response
+        };
+
+        const sendResult = emailjs.send(serviceID, templateID, templateParams);
+
+        console.log('Email sent successfully:', sendResult);
+
+        // Switch back to login tab
+        this.activeTab = 'login';
+      } catch (error) {
+        console.error('Failed to send email:', error);
+      }
+    }
   },
   watch: {
     isVisible(value) {

@@ -24,8 +24,8 @@
         <div align="center" id="nav">
           <router-link to="/" class="nav-link">home |</router-link>
           <router-link v-if="loggedIn" to="/profile" class="nav-link">  profile |</router-link>
-          <router-link to="/about" class="nav-link"> about |</router-link>
-          <tag @click="toggleModal" class="nav-link">  login/register</tag>
+          <router-link to="/about" class="nav-link"> about </router-link>
+          <tag v-if="!isAuthenticated" @click="toggleModal" class="nav-link">|  login/register</tag>
           <component :is="currentModalComponent" @close="closeModal" :is-visible="showLoginModal" />
         </div>
         <br>
