@@ -27,25 +27,25 @@
           <h3>Home Organization:</h3>
           <br>
           <div>
-            <v-text-field clearable label="Venue Name" variant="outlined" v-model="homeOrganizationData.VenueName" />
+            <v-text-field clearable label="Venue Name" variant="outlined" placeholder="Nampa Christian Orchard Campus" v-model="homeOrganizationData.VenueName" />
             <span v-if="!isValidAlphabetic(homeOrganizationData.VenueName)" class="error-message">
               The Venue Name should only have alphabetic characters.
             </span>
           </div>
           <div>
-            <v-text-field clearable label="Facility Name" variant="outlined" v-model="homeOrganizationData.FacilityName" />
+            <v-text-field clearable label="Facility Name" variant="outlined" placeholder="Barr Field" v-model="homeOrganizationData.FacilityName" />
             <span v-if="!isValidAlphabetic(homeOrganizationData.FacilityName)" class="error-message">
               The Facility Name should only have alphabetic characters.
             </span>
           </div>
           <div>
-            <v-text-field clearable label="Organization Name" variant="outlined" v-model="homeOrganizationData.OrganizationName" />
+            <v-text-field clearable label="Organization Name" variant="outlined" placeholder="Nampa Christian" v-model="homeOrganizationData.OrganizationName" />
             <span v-if="!isValidAlphabetic(homeOrganizationData.OrganizationName)" class="error-message">
               The Organization Name should only have alphabetic characters.
             </span>
           </div>
           <div>
-            <v-text-field clearable label="Team Name" variant="outlined" v-model="homeOrganizationData.TeamName" />
+            <v-text-field clearable label="Team Name" variant="outlined" placeholder="Trojans" v-model="homeOrganizationData.TeamName" />
             <span v-if="!isValidAlphabetic(homeOrganizationData.TeamName)" class="error-message">
               The Team Name should only have alphabetic characters.
             </span>
@@ -74,7 +74,7 @@
             </select>
           </div>
           <div>
-            <v-text-field clearable label="Competition Level" variant="outlined" v-model="homeOrganizationData.CompetitionLevel" />
+            <v-text-field clearable label="Competition Level" variant="outlined" placeholder="High School" v-model="homeOrganizationData.CompetitionLevel" />
             <span v-if="!isValidAlphaNumeric(homeOrganizationData.CompetitionLevel)" class="error-message">
               The Competition Level should only have alpha-numeric characters.
             </span>
@@ -85,25 +85,25 @@
           <h3>Away Organization:</h3>
           <br>
           <div>
-            <v-text-field clearable label="Venue Name" variant="outlined" v-model="awayOrganizationData.VenueName" />
+            <v-text-field clearable label="Venue Name" variant="outlined" placeholder="Melba High School" v-model="awayOrganizationData.VenueName" />
             <span v-if="!isValidAlphabetic(awayOrganizationData.VenueName)" class="error-message">
               The Venue Name should only have alphabetic characters.
             </span>
           </div>
           <div>
-            <v-text-field clearable label="Facility Name" variant="outlined" v-model="awayOrganizationData.FacilityName" />
+            <v-text-field clearable label="Facility Name" variant="outlined" placeholder="Mustang Field" v-model="awayOrganizationData.FacilityName" />
             <span v-if="!isValidAlphabetic(awayOrganizationData.FacilityName)" class="error-message">
               The Facility Name should only have alphabetic characters.
             </span>
           </div>
           <div>
-            <v-text-field clearable label="Organization Name" variant="outlined" v-model="awayOrganizationData.OrganizationName" />
+            <v-text-field clearable label="Organization Name" placeholder="Melba" variant="outlined" v-model="awayOrganizationData.OrganizationName" />
             <span v-if="!isValidAlphabetic(awayOrganizationData.OrganizationName)" class="error-message">
               The Organization Name should only have alphabetic characters.
             </span>
           </div>
           <div>
-            <v-text-field clearable label="Team Name" variant="outlined" v-model="awayOrganizationData.TeamName" />
+            <v-text-field clearable label="Team Name" variant="outlined" placeholder="Mustangs" v-model="awayOrganizationData.TeamName" />
             <span v-if="!isValidAlphabetic(awayOrganizationData.TeamName)" class="error-message">
               The Team Name should only have alphabetic characters.
             </span>
@@ -132,7 +132,7 @@
             </select>
           </div>
           <div>
-            <v-text-field clearable label="Competition Level" variant="outlined" v-model="awayOrganizationData.CompetitionLevel" />
+            <v-text-field clearable label="Competition Level" variant="outlined" placeholder="High School" v-model="awayOrganizationData.CompetitionLevel" />
             <span v-if="!isValidAlphaNumeric(awayOrganizationData.CompetitionLevel)" class="error-message">
               The Competition Level should only have alpha-numeric characters.
             </span>
@@ -148,14 +148,14 @@
           </div>
           <div>
             <v-checkbox label="Live Stream" v-model="liveStream.enabled" @change="updateLiveStreamEnabled()"></v-checkbox>
-            <v-text-field clearable :disabled="!liveStream.enabled" label="Live Stream Provider" variant="outlined" v-model="liveStream.network" />
+            <v-text-field clearable :disabled="!liveStream.enabled" label="Live Stream Provider" placeholder="maxpreps" variant="outlined" v-model="liveStream.network" />
               <span v-if="!isValidAlphabetic(liveStream.network)" class="error-message">
               The Live Stream provider should only have alphabetic characters.
             </span>
           </div>
           <div>
             <v-checkbox label="Sportsmanship" v-model="sportsmanship.enabled" @change="updateSportsmanshipEnabled()"></v-checkbox>
-            <v-text-field clearable :disabled="!sportsmanship.enabled" label="Sportsmanship Governing Authority" variant="outlined" v-model="sportsmanship.governingAuthority" />
+            <v-text-field clearable :disabled="!sportsmanship.enabled" label="Sportsmanship Governing Authority" placeholder="ISHAA" variant="outlined" v-model="sportsmanship.governingAuthority" />
               <span v-if="!isValidAlphaNumeric(sportsmanship.governingAuthority)" class="error-message">
               The Governing Authority should only have alphabetic characters.
             </span>
@@ -182,19 +182,19 @@
                 <input type="date" v-model="nextGameData.date" />
                 <br>
                 <br>
-                <v-text-field clearable label="Opponent Name" variant="outlined" v-model="nextGameData.nextOpponentName" />
+                <v-text-field clearable label="Opponent Name" placeholder="New Plymouth High School" variant="outlined" v-model="nextGameData.nextOpponentName" />
                 <span v-if="!isValidAlphabetic(nextGameData.nextOpponentName)" class="error-message">
                   The Opponent Name should only have alphabetic characters.
                 </span>
                 <br>
   
-                <v-text-field clearable label="Opponent Mascot" variant="outlined" v-model="nextGameData.nextOpponentMascot" />
+                <v-text-field clearable label="Opponent Mascot" placeholder="Pilgrims" variant="outlined" v-model="nextGameData.nextOpponentMascot" />
                 <span v-if="!isValidAlphabetic(nextGameData.nextOpponentMascot)" class="error-message">
                   The Opponent Mascot should only have alphabetic characters.
                 </span>
                 <br>
   
-                <v-text-field clearable label="Game Location" variant="outlined" v-model="nextGameData.nextGameLocation" />
+                <v-text-field clearable label="Game Location" placeholder="Nampa Christian Orchard Campus" variant="outlined" v-model="nextGameData.nextGameLocation" />
                 <span v-if="!isValidAlphabetic(nextGameData.nextGameLocation)" class="error-message">
                   The Game Location should only have alphabetic characters.
                 </span>
@@ -203,14 +203,14 @@
           </div>
           <div>
             <v-checkbox label="Prayer" v-model="prayer.enabled" @change="updatePrayerEnabled()"></v-checkbox>
-            <v-text-field clearable :disabled="!prayer.enabled" label="Name of Person Praying" variant="outlined" v-model="prayer.personPraying" />
+            <v-text-field clearable :disabled="!prayer.enabled" label="Name of Person Praying" placeholder="Alice Hemmingway" variant="outlined" v-model="prayer.personPraying" />
               <span v-if="!isValidAlphabetic(prayer.personPraying)" class="error-message">
               The Person Praying should only have alphabetic characters.
             </span>
           </div>
           <div>
             <v-checkbox label="National Anthem" v-model="nationalAnthem.enabled" @change="updateNationalAnthemEnabled()"></v-checkbox>
-            <v-text-field clearable :disabled="!nationalAnthem.enabled" label="National Anthem Performers" variant="outlined" v-model="nationalAnthem.personSinging" />
+            <v-text-field clearable :disabled="!nationalAnthem.enabled" label="National Anthem Performers" placeholder="Nampa Christian Middle School Pep Band" variant="outlined" v-model="nationalAnthem.personSinging" />
               <span v-if="!isValidAlphabetic(nationalAnthem.personSinging)" class="error-message">
               The Person(s) Performing should only have alphabetic characters.
             </span>
@@ -470,7 +470,7 @@
         }
         if (this.sportsmanship.enabled) {
           textY -= fontSize * 2;
-          page.drawText(`Sportsmanship: ${this.sportsmanship.message}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
+          page.drawText(`Sportsmanship: ${this.sportsmanship.governingAuthority}`, { x: textX, y: textY, size: fontSize, color: rgb(0, 0, 0) });
         }
         if (this.concessions.enabled) {
           textY -= fontSize * 2;

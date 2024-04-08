@@ -6,23 +6,23 @@
         <v-col cols="12">
           <v-row>
             <v-col cols="6">
-              <v-text-field v-model="organizationData.venueName" label="Venue Name" outlined></v-text-field>
+              <v-text-field v-model="organizationData.venueName" label="Venue Name" placeholder="Nampa Christian Orchard Campus" outlined></v-text-field>
             </v-col>
             <v-col cols="6">
-              <v-text-field v-model="organizationData.facilityName" label="Facility Name" outlined></v-text-field>
+              <v-text-field v-model="organizationData.facilityName" label="Facility Name" placeholder="Barr Field" outlined></v-text-field>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="6">
-              <v-text-field v-model="organizationData.organizationName" label="Organization Name" outlined></v-text-field>
+              <v-text-field v-model="organizationData.organizationName" label="Organization Name" placeholder="Nampa Christian" outlined></v-text-field>
             </v-col>
             <v-col cols="6">
-              <v-text-field v-model="organizationData.teamName" label="Team Name" outlined></v-text-field>
+              <v-text-field v-model="organizationData.teamName" label="Team Name" placeholder="Trojans" outlined></v-text-field>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12">
-              <select id="conferenceRelevance" v-model="organizationData.ConferenceRelevance">
+              <select id="conferenceRelevance" v-model="organizationData.conferenceRelevance">
             <option value="">Select Conference Relevance</option>
             <option value="1A">1A</option>
             <option value="1B">1B</option>
@@ -47,7 +47,7 @@
           </v-row>
           <v-row>
             <v-col cols="12">
-              <v-text-field v-model="organizationData.competitionLevel" label="Competition Level" outlined></v-text-field>
+              <v-text-field v-model="organizationData.competitionLevel" label="Competition Level" placeholder="High School" outlined></v-text-field>
             </v-col>
           </v-row>
         </v-col>
@@ -56,22 +56,22 @@
       <!-- Roster Div -->
       <v-row v-for="(roster, index) in organizationData.rosters" :key="index">
         <v-col cols="12">
-          <v-text-field v-model="roster.rosterName" label="Roster Name" outlined></v-text-field>
+          <v-text-field v-model="roster.rosterName" label="Roster Name" placeholder="Nampa Christian High School Football" outlined></v-text-field>
         </v-col>
         <v-col cols="12">
-          <v-text-field v-model="roster.coachName" label="Coach Name" outlined></v-text-field>
+          <v-text-field v-model="roster.coachName" label="Coach Name" placeholder="Billy Bob" outlined></v-text-field>
         </v-col>
         <v-col cols="12">
           <h2>Add Players:</h2>
         </v-col>
         <v-col cols="12">
-          <v-text-field v-model="player.playerName" label="Player Name" outlined></v-text-field>
+          <v-text-field v-model="player.playerName" label="Player Name" placeholder="Jimmy Johnson" outlined></v-text-field>
         </v-col>
         <v-col cols="12">
-          <v-text-field v-model="player.playerPosition" label="Player Position" outlined></v-text-field>
+          <v-text-field v-model="player.playerPosition" label="Player Position" placeholder="Quarterback" outlined></v-text-field>
         </v-col>
         <v-col cols="12">
-          <v-text-field v-model="player.playerNumber" label="Player Number" type="number" outlined></v-text-field>
+          <v-text-field v-model="player.playerNumber" label="Player Number" type="number" placeholder="0" outlined></v-text-field>
         </v-col>
         <v-col cols="12">
           <v-checkbox v-model="player.playerIsStarting" label="Player Is Starting"></v-checkbox>
@@ -86,7 +86,7 @@
           {{ player.playerName }}
         </v-col>
         <v-col cols="2">
-          <v-btn color="#FF5964" @click="deletePlayer(index)">Delete Player</v-btn>
+          <v-btn color="#FF5964" @click="deletePlayer(roster.roster, player)">Delete Player</v-btn>
         </v-col>
       </v-row>
     </v-list-item-content>
@@ -97,8 +97,6 @@
       </v-row>
 
       <v-btn color="#00D9FF" type="submit" block><p class="custom-font-color">Update</p></v-btn>
-      <br>
-      <br>
       <br>
     </v-form>
     <!-- Delete button -->
@@ -135,11 +133,11 @@
     },
     methods: {
       async submitForm() {
-  if (!this.validateForm()) {
+        if (!this.validateForm()) {
     return;
-  }
+      }
 
-  try {
+    try {
     // Update organization data
     const organizationResponse = await axios.put(
       'https://localhost:7273/profile/update/organization',
@@ -262,32 +260,19 @@
         playerIsStarting: false,
       };
       },
-      async deletePlayer(player, rosterIndex) {
+      async deletePlayer(roster, player) {
   try {
-    // Find the index of the player to delete in the roster
-    const indexToDelete = this.organizationData.rosters[rosterIndex].roster.findIndex(p => p.playerID === player.playerID);
-    
-    if (indexToDelete !== -1) {
-      // Remove the player from the roster
-      this.organizationData.rosters[rosterIndex].roster.splice(indexToDelete, 1);
+    // Remove player from the roster array
+    roster.pop(player);
       
       // Remove the player from newPlayers array
       const newPlayerIndex = this.newPlayers.findIndex(p => p.playerID === player.playerID);
       if (newPlayerIndex !== -1) {
         this.newPlayers.splice(newPlayerIndex, 1);
       }
-      
-      // Remove the player from rosterIds array if needed
-      if (this.rosterIds.length > rosterIndex) {
-        this.rosterIds.splice(rosterIndex, 1);
-      }
 
       // Perform the deletion on the server side
       await axios.delete(`https://localhost:7273/profile/delete/player?playerID=${player.playerID}`);
-
-    } else {
-      console.error('Player not found in roster.');
-    }
   } catch (error) {
     console.error('Error deleting player:', error);
   }

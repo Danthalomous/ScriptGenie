@@ -6,21 +6,21 @@
         <v-col cols="12">
           <v-row>
             <v-col cols="6">
-              <v-text-field v-model="organizationData.VenueName" label="Venue Name" outlined></v-text-field>
+              <v-text-field v-model="organizationData.VenueName" label="Venue Name" placeholder="Nampa Christian Orchard Campus" outlined></v-text-field>
               <span v-if="!isValidAlphabetic(organizationData.VenueName)" class="error-message">The Venue Name should only have alphabetic characters.</span>
             </v-col>
             <v-col cols="6">
-              <v-text-field v-model="organizationData.FacilityName" label="Facility Name" outlined></v-text-field>
+              <v-text-field v-model="organizationData.FacilityName" label="Facility Name" placeholder="Barr Field" outlined></v-text-field>
               <span v-if="!isValidAlphabetic(organizationData.FacilityName)" class="error-message">The Facility Name should only have alphabetic characters.</span>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="6">
-              <v-text-field v-model="organizationData.OrganizationName" label="Organization Name" outlined></v-text-field>
+              <v-text-field v-model="organizationData.OrganizationName" label="Organization Name" placeholder="Nampa Christian" outlined></v-text-field>
               <span v-if="!isValidAlphabetic(organizationData.OrganizationName)" class="error-message">The Organization Name should only have alphabetic characters.</span>
             </v-col>
             <v-col cols="6">
-              <v-text-field v-model="organizationData.TeamName" label="Team Name" outlined></v-text-field>
+              <v-text-field v-model="organizationData.TeamName" label="Team Name" placeholder="Trojans" outlined></v-text-field>
               <span v-if="!isValidAlphabetic(organizationData.TeamName)" class="error-message">The Team Name should only have alphabetic characters.</span>
             </v-col>
           </v-row>
@@ -51,7 +51,7 @@
           </v-row>
           <v-row>
             <v-col cols="12">
-              <v-text-field v-model="organizationData.CompetitionLevel" label="Competition Level" outlined></v-text-field>
+              <v-text-field v-model="organizationData.CompetitionLevel" label="Competition Level" placeholder="High School" outlined></v-text-field>
               <span v-if="!isValidAlphaNumeric(organizationData.CompetitionLevel)" class="error-message">The Competition Level should only have alpha-numeric characters.</span>
             </v-col>
           </v-row>
@@ -61,26 +61,26 @@
       <!-- Roster Div -->
       <v-row>
         <v-col cols="12">
-          <v-text-field v-model="roster.rosterName" label="Roster Name" outlined></v-text-field>
+          <v-text-field v-model="roster.rosterName" label="Roster Name" placeholder="Nampa Christian Football" outlined></v-text-field>
           <span v-if="!isValidAlphabetic(roster.rosterName)" class="error-message">A Roster Name should only contain alphabetic characters.</span>
         </v-col>
         <v-col cols="12">
-          <v-text-field v-model="roster.coachName" label="Coach Name" outlined></v-text-field>
+          <v-text-field v-model="roster.coachName" label="Coach Name" placeholder="Billy Bob" outlined></v-text-field>
           <span v-if="!isValidAlphabetic(roster.coachName)" class="error-message">A Coach Name should only contain alphabetic characters.</span>
         </v-col>
         <v-col cols="12">
           <h2>Add Players:</h2>
         </v-col>
         <v-col cols="12">
-          <v-text-field v-model="player.playerName" label="Player Name" outlined></v-text-field>
+          <v-text-field v-model="player.playerName" label="Player Name" placeholder="Jimmy Johnson" outlined></v-text-field>
           <span v-if="!isValidAlphabetic(player.playerName)" class="error-message">A Player Name should only contain alphabetic characters.</span>
         </v-col>
         <v-col cols="12">
-          <v-text-field v-model="player.playerPosition" label="Player Position" outlined></v-text-field>
+          <v-text-field v-model="player.playerPosition" label="Player Position" placeholder="Quarterback" outlined></v-text-field>
           <span v-if="!isValidAlphabetic(player.playerPosition)" class="error-message">A Player Position should only contain alphabetic characters.</span>
         </v-col>
         <v-col cols="12">
-          <v-text-field v-model="player.playerNumber" label="Player Number" type="number" outlined></v-text-field>
+          <v-text-field v-model="player.playerNumber" label="Player Number" type="number" placeholder="0" outlined></v-text-field>
         </v-col>
         <v-col cols="12">
           <v-checkbox v-model="player.playerIsStarting" label="Player Is Starting"></v-checkbox>
@@ -190,9 +190,6 @@ export default {
       if(!this.isValidAlphabetic(this.player.playerPosition) || this.player.playerPosition == null) {
         return; // Don't submit if Player Position is invalid
       }
-      if(!this.isValidNumber(this.player.playerNumber) || this.player.playerNumber == null) {
-        return; // Don't submit if Player Number is invalid
-      }
 
       // Generate OrganizationID
       const organizationID = uuidv4();
@@ -291,7 +288,7 @@ export default {
       this.player = {
         playerName: '',
         playerPosition: '',
-        playerNumber: 0,
+        playerNumber: '0',
         playerIsStarting: false,
       };
       this.players = [];

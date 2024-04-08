@@ -28,7 +28,7 @@
         <br>
         <button type="submit" class="submit-button"><p class="custom-font-color">Login</p></button>
         <br>
-        <p align="right" class="custom-font-color" @click="forgotPassword">Forgot Password?</p>
+        <p align="right" class="custom-font-color nav-link" @click="forgotPassword">Forgot Password?</p>
       </form>
       <!-- Forgot Password Form -->
       <form v-if="activeTab === 'forgotPassword'" @submit.prevent="sendResetLink">
@@ -381,5 +381,13 @@ export default {
 
 .custom-font-color {
   color: #FFFFFF;
+}
+
+.nav-link {
+  color: rgb(199, 199, 199);
+}
+
+.nav-link:hover {
+  cursor: pointer;
 }
 </style>

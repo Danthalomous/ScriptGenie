@@ -16,9 +16,6 @@
           <br>
           <br>
           <br>
-          <br>
-          <br>
-          <br>
         </div>
         <h2 align="center" class="custom-font-color">Max-Pro Scripts</h2>
         <div align="center" id="nav">
